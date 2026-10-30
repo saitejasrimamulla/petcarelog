@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="PetCareLog helps you keep your pets' profiles and care history in one place.">
+  <title>PetCareLog — Pet care, organized</title><link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="#"><span class="brand-mark">♥</span> PetCareLog</a><span id="header-user" class="muted"></span><button id="logout-btn" class="button button-quiet hidden">Log out</button></header>
+<main class="shell">
+  <section id="auth-view" class="auth-layout">
+    <div class="hero"><div class="eyebrow">A little more care, every day</div><h1>All your pet’s important moments, <em>in one place.</em></h1><p>Keep pet profiles, vaccinations, appointments, and everyday care notes organized without the paper pile.</p><div class="hero-points"><span>✓ Pet profiles</span><span>✓ Care history</span><span>✓ Easy to update</span></div></div>
+    <div class="panel auth-panel"><div class="tabs"><button class="tab active" data-tab="login">Log in</button><button class="tab" data-tab="register">Create account</button></div>
+      <form id="auth-form"><h2 id="auth-title">Welcome back</h2><p id="auth-subtitle" class="muted">Log in to see your pet care dashboard.</p>
+        <label id="name-wrap" class="hidden">Your name<input id="name" name="name" autocomplete="name" maxlength="80"></label>
+        <label>Email address<input id="email" name="email" type="email" required autocomplete="email" maxlength="254"></label>
+        <label>Password<input id="password" name="password" type="password" required autocomplete="current-password" minlength="8" maxlength="128"><small>Use at least 8 characters.</small></label>
+        <button class="button button-primary full" type="submit" id="auth-submit">Log in</button><p id="auth-error" class="message error hidden" role="alert"></p>
+      </form>
+    </div>
+  </section>
+  <section id="app-view" class="hidden">
+    <div class="welcome-row"><div><div class="eyebrow">YOUR PET CARE SPACE</div><h1>Good care starts with <em>good notes.</em></h1><p class="muted">Your pets and their care history, all together.</p></div><button class="button button-primary" id="add-pet-open">＋ Add a pet</button></div>
+    <div id="notice" class="message hidden" role="status"></div>
+    <section class="stats"><article class="stat-card"><span class="stat-icon">🐾</span><div><span class="stat-label">Your pets</span><strong id="pet-count">0</strong></div></article><article class="stat-card"><span class="stat-icon">🩺</span><div><span class="stat-label">Care entries</span><strong id="record-count">0</strong></div></article><article class="stat-card"><span class="stat-icon">📅</span><div><span class="stat-label">Upcoming care</span><strong id="upcoming-count">0</strong></div></article></section>
+    <section class="section-heading"><div><h2>Your pets</h2><p class="muted">Select a pet to view or add care records.</p></div><input id="pet-search" class="search" type="search" placeholder="Search pets…" aria-label="Search pets"></section>
+    <div id="pet-list" class="pet-grid"></div>
+    <div id="empty-state" class="empty-state hidden"><div class="empty-emoji">🐶 🐱</div><h3>Your pet story starts here</h3><p>Add your first pet to start tracking important care details.</p><button class="button button-primary" id="empty-add">Add your first pet</button></div>
+    <section id="records-section" class="records-section hidden"><div class="section-heading"><div><div class="eyebrow">CARE JOURNAL</div><h2 id="records-title">Care history</h2><p class="muted">Vaccinations, vet visits, medication, grooming, and notes.</p></div><button id="add-record-open" class="button button-primary">＋ Add care entry</button></div><div id="record-list" class="record-list"></div></section>
+  </section>
+</main>
+<div id="pet-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="pet-modal-title"><div class="modal-card"><div class="modal-head"><h2 id="pet-modal-title">Add a pet</h2><button class="icon-button" data-close="pet-modal" aria-label="Close">×</button></div><form id="pet-form"><input id="pet-id" type="hidden"><label>Pet name<input id="pet-name" required maxlength="80" placeholder="e.g. Milo"></label><div class="form-grid"><label>Species<select id="pet-species" required><option value="Dog">Dog</option><option value="Cat">Cat</option><option value="Bird">Bird</option><option value="Rabbit">Rabbit</option><option value="Other">Other</option></select></label><label>Breed (optional)<input id="pet-breed" maxlength="80" placeholder="e.g. Beagle"></label></div><div class="form-grid"><label>Date of birth (optional)<input id="pet-dob" type="date"></label><label>Sex (optional)<select id="pet-sex"><option value="">Not specified</option><option>Female</option><option>Male</option></select></label></div><label>Notes (optional)<textarea id="pet-notes" rows="3" maxlength="1000" placeholder="Personality, allergies, or other helpful details"></textarea></label><p id="pet-error" class="message error hidden"></p><div class="modal-actions"><button type="button" class="button button-quiet" data-close="pet-modal">Cancel</button><button class="button button-primary" type="submit">Save pet</button></div></form></div></div>
+<div id="record-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="record-modal-title"><div class="modal-card"><div class="modal-head"><h2 id="record-modal-title">Add care entry</h2><button class="icon-button" data-close="record-modal" aria-label="Close">×</button></div><form id="record-form"><input id="record-id" type="hidden"><label>Entry title<input id="record-title" required maxlength="120" placeholder="e.g. Annual check-up"></label><div class="form-grid"><label>Type<select id="record-type"><option>Vet visit</option><option>Vaccination</option><option>Medication</option><option>Grooming</option><option>Feeding</option><option>Other</option></select></label><label>Date<input id="record-date" type="date" required></label></div><label>Next due date (optional)<input id="record-due" type="date"></label><label>Details (optional)<textarea id="record-details" rows="3" maxlength="2000" placeholder="What happened? Any instructions?"></textarea></label><p id="record-error" class="message error hidden"></p><div class="modal-actions"><button type="button" class="button button-quiet" data-close="record-modal">Cancel</button><button class="button button-primary" type="submit">Save entry</button></div></form></div></div>
+<div id="confirm-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-title"><div class="modal-card"><h2 id="confirm-title">Delete this item?</h2><p id="confirm-text">This action cannot be undone.</p><div class="modal-actions"><button id="confirm-cancel" class="button button-quiet">Cancel</button><button id="confirm-delete" class="button button-danger">Delete</button></div></div></div>
+<footer><span>PetCareLog</span><span>Made for happier, healthier pet routines 🐾</span></footer>
+</body></html>
